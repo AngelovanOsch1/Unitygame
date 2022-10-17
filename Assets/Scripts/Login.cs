@@ -9,6 +9,9 @@ using UnityEngine.UI;
 
 public class Login : MonoBehaviour
 {
+
+    public string returnedAccount;
+
     [SerializeField] private string loginEndpoint = "http://127.0.0.1:13756/account/login";
     [SerializeField] private string createEndpoint = "http://127.0.0.1:13756/account/create";
 
@@ -23,15 +26,12 @@ public class Login : MonoBehaviour
     public void OnLoginClick()
     {
         alertText.text = "Signing in...";
-        ActivateButtons(false);
-
         StartCoroutine(Trylogin());
     }
 
     public void OnCreateClick()
     {
         alertText.text = "Creating account...";
-        ActivateButtons(false);
         StartCoroutine(TryCreate());
     }
     private IEnumerator Trylogin()
@@ -60,19 +60,16 @@ public class Login : MonoBehaviour
                 yield return null;
             }
 
-
             if (request.result == UnityWebRequest.Result.Success)
             {
                 if (request.downloadHandler.text != "Invalid credentials")
                 {
-                    alertText.text = "Welcome";
-                    ActivateButtons(false);
                     GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
                    
                     if (returnedAccount.level == "1")
                     {
                         SceneManager.LoadScene(1);
-                    }
+                    }  
                     
                     else if (returnedAccount.level == "2")
                     {
@@ -81,16 +78,13 @@ public class Login : MonoBehaviour
                 }
                 else
                 {
-                    Debug.Log("2");
-                    ActivateButtons(true);
+                    Debug.Log("ERROR");
                 }
             }
             else
             {
-                Debug.Log("3");
-                loginButton.interactable = true;
+                Debug.Log("ERROR");
             }
-
             yield return null;
     }
     
@@ -125,27 +119,17 @@ public class Login : MonoBehaviour
             {
                 if (request.downloadHandler.text != "Invalid credentials" && request.downloadHandler.text != "Username is already taken")
                 {
-                    GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
                     Debug.Log("Account has been created");
                 }
                 else
                 {
-                    Debug.Log("fuck");
+                    Debug.Log("ERROR");
                 }
             }
             else
             {
                 Debug.Log("Error connecting to the server");
             }
-
-        ActivateButtons(true);
-
             yield return null;
-    }
-
-    private void ActivateButtons(bool toggle)
-    {
-        loginButton.interactable = toggle;
-        createButton.interactable = toggle;
     }
 }
