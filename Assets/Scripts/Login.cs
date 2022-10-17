@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using System;
 using System.Collections;
 using TMPro;
@@ -59,6 +60,7 @@ public class Login : MonoBehaviour
                 yield return null;
             }
 
+
             if (request.result == UnityWebRequest.Result.Success)
             {
                 if (request.downloadHandler.text != "Invalid credentials")
@@ -66,7 +68,16 @@ public class Login : MonoBehaviour
                     alertText.text = "Welcome";
                     ActivateButtons(false);
                     GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
-                    SceneManager.LoadScene(1);
+                   
+                    if (returnedAccount.level == "1")
+                    {
+                        SceneManager.LoadScene(1);
+                    }
+                    
+                    else if (returnedAccount.level == "2")
+                    {
+                        SceneManager.LoadScene(2);
+                    }
                 }
                 else
                 {

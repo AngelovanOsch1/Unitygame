@@ -18,6 +18,9 @@ public class SaveScore : MonoBehaviour
         scoreCounter = PlayerPrefs.GetInt("score");
         ScoreText.text = "Score: " + scoreCounter;
 
+        GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>
+
+
     }
 
     // Update is called once per frame
