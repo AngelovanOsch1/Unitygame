@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System;
 using System.Collections;
 using TMPro;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
@@ -9,12 +10,8 @@ using UnityEngine.UI;
 
 public class Login : MonoBehaviour
 {
-
-    public string returnedAccount;
-
     [SerializeField] private string loginEndpoint = "http://127.0.0.1:13756/account/login";
     [SerializeField] private string createEndpoint = "http://127.0.0.1:13756/account/create";
-
 
     [SerializeField] private TextMeshProUGUI alertText;
     [SerializeField] private TMP_InputField usernameInputField;
@@ -22,6 +19,7 @@ public class Login : MonoBehaviour
     [SerializeField] private Button loginButton;
     [SerializeField] private Button createButton;
 
+    GameAccount gameAccount = null;
 
     public void OnLoginClick()
     {
@@ -34,7 +32,9 @@ public class Login : MonoBehaviour
         alertText.text = "Creating account...";
         StartCoroutine(TryCreate());
     }
-    private IEnumerator Trylogin()
+
+
+    public IEnumerator Trylogin()
     {
         string username = usernameInputField.text;
         string password = passwordInputField.text;
@@ -64,14 +64,20 @@ public class Login : MonoBehaviour
             {
                 if (request.downloadHandler.text != "Invalid credentials")
                 {
-                    GameAccount returnedAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
-                   
-                    if (returnedAccount.level == "1")
+                    GameAccount gameAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
+
+                    GameAccount account = new GameAccount();
+
+                    account.username = gameAccount.username;
+                    string test = account.username;
+                    
+
+                    if (gameAccount.level == "1")
                     {
                         SceneManager.LoadScene(1);
                     }  
                     
-                    else if (returnedAccount.level == "2")
+                    else if (gameAccount.level == "2")
                     {
                         SceneManager.LoadScene(2);
                     }
@@ -88,7 +94,6 @@ public class Login : MonoBehaviour
             yield return null;
     }
     
-
     private IEnumerator TryCreate()
     {
         string username = usernameInputField.text;

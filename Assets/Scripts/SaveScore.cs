@@ -14,10 +14,9 @@ public class SaveScore : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-
+        
         scoreCounter = PlayerPrefs.GetInt("score");
         ScoreText.text = "Score: " + scoreCounter;
-
     }
 
     // Update is called once per frame
