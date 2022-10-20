@@ -19,7 +19,7 @@ public class Login : MonoBehaviour
     [SerializeField] private Button loginButton;
     [SerializeField] private Button createButton;
 
-    GameAccount gameAccount = null;
+    public GameAccount gameAccount;
 
     public void OnLoginClick()
     {
@@ -60,37 +60,43 @@ public class Login : MonoBehaviour
                 yield return null;
             }
 
-            if (request.result == UnityWebRequest.Result.Success)
+        if (request.result == UnityWebRequest.Result.Success)
+        {
+
+            if (request.downloadHandler.text != "Invalid credentials")
             {
-                if (request.downloadHandler.text != "Invalid credentials")
+                GameAccount gameAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
+                this.gameAccount = gameAccount;
+                Debug.Log(request.downloadHandler.text);
+
+                //int gameAccountLevel = Convert.ToInt32(gameAccount.level);
+
+                //Debug.Log(gameAccountLevel);
+
+                Debug.Log(gameAccount.username);
+                PlayerPrefs.SetInt("score", gameAccount.score);
+                PlayerPrefs.SetInt("level", gameAccount.level);
+                PlayerPrefs.SetString("username", gameAccount.username);
+
+                if (gameAccount.level == 1)
                 {
-                    GameAccount gameAccount = JsonUtility.FromJson<GameAccount>(request.downloadHandler.text);
-
-                    GameAccount account = new GameAccount();
-
-                    account.username = gameAccount.username;
-                    string test = account.username;
-                    
-
-                    if (gameAccount.level == "1")
-                    {
-                        SceneManager.LoadScene(1);
-                    }  
-                    
-                    else if (gameAccount.level == "2")
-                    {
-                        SceneManager.LoadScene(2);
-                    }
+                    SceneManager.LoadScene(1);
                 }
-                else
+
+                else if (gameAccount.level == 1)
                 {
-                    Debug.Log("ERROR");
+                    SceneManager.LoadScene(2);
                 }
             }
             else
             {
                 Debug.Log("ERROR");
             }
+        }
+        else
+        {
+            Debug.Log("ERROR");
+        }
             yield return null;
     }
     

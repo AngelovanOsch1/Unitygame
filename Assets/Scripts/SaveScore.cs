@@ -10,6 +10,7 @@ public class SaveScore : MonoBehaviour
     // Start is called before the first frame update
 
     private Rigidbody2D rb;
+    public string test = "";
     // Start is called before the first frame update
     void Start()
     {

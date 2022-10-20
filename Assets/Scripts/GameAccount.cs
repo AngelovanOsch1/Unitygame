@@ -4,9 +4,9 @@ using UnityEngine;
 public class GameAccount
 {
     public string _id;
-    public string username {get; set;}
-    public string score { get; set; }
-    public string level { get; set; }
+    public string username;
+    public int score;
+    public int level;
 
 }
 

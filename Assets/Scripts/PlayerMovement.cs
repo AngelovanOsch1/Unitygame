@@ -19,8 +19,11 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
 
-        scoreCounter = 0;
+        scoreCounter = PlayerPrefs.GetInt("score");
         ScoreText.text = "Score: " + scoreCounter;
+        Debug.Log(PlayerPrefs.GetInt("score"));
+        Debug.Log(PlayerPrefs.GetInt("level"));
+        Debug.Log(PlayerPrefs.GetString("username"));
 
     }
 
